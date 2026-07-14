@@ -1,6 +1,6 @@
-import { createContext } from "react";
-import { useState } from "react";
-export const AuthContext = createContext();
+import { createContext, useState, useContext } from "react";
+//import { useState } from "react";
+const AuthContext = createContext(null);
 
 export default function AuthProvider({ children }) {
     const [user, setUser] = useState(localStorage.getItem("currentUserEmail") ? JSON.parse(localStorage.getItem("currentUserEmail")) : null );
@@ -40,4 +40,12 @@ export default function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }

@@ -1,14 +1,17 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Auth() {
+  /* A hook is a function that lets you “hook into” React state and lifecycle features from function components.
+   Hooks don’t work inside classes — they let you use React without classes. Every hook start with name "use" */
   const [mode, setMode] = useState('login');
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
+  const { signUp, login } = useAuth(); //useContext(AuthContext);
+
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { signUp, login, logout, user } = useContext(AuthContext);
 
   function onSubmit(data) {
     let result;
@@ -29,8 +32,6 @@ export default function Auth() {
     <div className="page">
       <div className="Container">
         <div className="auth-container">
-          {user && <p>Welcome, {user.email}!</p>}
-          <button onClick={logout} className="btn btn-secondary btn-large">Logout</button>
         <h1 className="page-title">{mode === 'signup' ? 'Sign Up' : 'Login'}</h1>
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
           {error && <div className="error-message">{error}</div>}

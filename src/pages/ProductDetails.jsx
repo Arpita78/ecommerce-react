@@ -1,0 +1,48 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom"
+import { getProductById } from "../data/products";
+
+export default function ProductDetails() {
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
+    //const product = getProductById(id);
+    const navigate = useNavigate();    
+
+    useEffect(() => {
+        const foundProduct = getProductById(id);
+
+        if (!foundProduct) {
+        navigate("/");
+        return;
+        }
+
+        setProduct(foundProduct);
+    }, [id]);
+
+    if (!product) {
+        return <h1>Loading product details...</h1>;
+    }
+
+    return (
+        <div className="page">
+            <div class="container">
+                <div class="product-detail">
+                    <div class="product-detail-image">
+                        <img src={product.image} alt={product.name}/>
+                    </div>
+                   <div className="product-detail-content">
+                    <h1 className="product-detail-name">{product.name}</h1>
+                    <p className="product-detail-price">${product.price}</p>
+                    <p className="product-detail-description">{product.description}</p>
+                    <button
+                    className="btn btn-primary"
+                    onClick={() => addToCart(product.id)}
+                    >
+                    Add to Cart
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
